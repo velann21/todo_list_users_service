@@ -4,7 +4,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 	"github.com/todo_list_users_service/pkg/databases"
-	"github.com/todo_list_users_service/pkg/helpers"
 	"github.com/todo_list_users_service/pkg/routes"
 	"log"
 	"net/http"
@@ -16,7 +15,7 @@ func main() {
 	logrus.SetFormatter(&logrus.JSONFormatter{
 		TimestampFormat:time.RFC3339,
 	})
-	helpers.SetEnv()
+	//helpers.SetEnv()
 
 	r := mux.NewRouter().StrictSlash(false)
 	mainRoutes := r.PathPrefix("/api/v1/users").Subrouter()
