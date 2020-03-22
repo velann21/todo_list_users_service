@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: usersrv
-          image: singaravelan21/todo_list_user_srv:v1.0.4
+          image: singaravelan21/todo_list_user_srv:v1.0.7
           env:
             - name: MYSQL_CONN
               value: root:root@tcp(usersrv-database:3306)/UsersService?
