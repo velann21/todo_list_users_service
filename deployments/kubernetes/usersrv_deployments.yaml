@@ -13,10 +13,10 @@ spec:
     spec:
       containers:
         - name: usersrv
-          image: singaravelan21/todo_list_user_srv:v1.0.1
+          image: singaravelan21/todo_list_user_srv:v1.0.4
           env:
             - name: MYSQL_CONN
-              value: root:root@tcp(database:3306)/UsersService?
+              value: root:root@tcp(usersrv-database:3306)/UsersService?
             - name:  AUTHSERVICE_CONN
               value: http://todolistauthsrv:8083/api/v1/auth/newtoken
   replicas: 3

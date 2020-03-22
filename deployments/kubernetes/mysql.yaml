@@ -19,7 +19,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: database
+  name: usersrv-database
 spec:
   selector:
     app: mysql

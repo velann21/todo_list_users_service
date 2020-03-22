@@ -2,7 +2,7 @@ package service;
 
 import (
 	"context"
-	dm "github.com/todo_list_users_service/pkg/dao/dao_dependency_manager"
+	"github.com/todo_list_users_service/pkg/dao"
 	internalRequest "github.com/todo_list_users_service/pkg/entities"
 	"github.com/todo_list_users_service/pkg/entities/data"
 	dataResponse "github.com/todo_list_users_service/pkg/entities/data"
@@ -14,13 +14,13 @@ import (
 	"log"
 )
 type UserManagementService struct{
-     HttpHandler func()
+     Dao dao.UserDao
 }
 
 func (um *UserManagementService) UserSignIn(ctx context.Context, request requestEntites.UserSigninRequest) (*string, error) {
-	userDao := dm.NewDao(dm.USERDAO)
+	//userDao := dm.NewDao(dm.USERDAO)
 	userModel := internalRequest.UserData{}
-	userData, err := userDao.GetUserByEmail(ctx, request.Email)
+	userData, err := um.Dao.GetUserByEmail(ctx, request.Email)
 	if err != nil{
 		return nil, err
 	}
@@ -28,7 +28,7 @@ func (um *UserManagementService) UserSignIn(ctx context.Context, request request
 		return nil, helpers.UserAlreadyExist
 	}
 	userModel.PopulateUserData(request.FirstName, request.LastName, request.Email, request.DOB, request.PhoneNumber, request.Password);
-    _ ,err = userDao.CreateUserAndRoles(ctx, userModel, request.Role)
+    _ ,err = um.Dao.CreateUserAndRoles(ctx, userModel, request.Role)
     if err != nil{
 		return nil, helpers.Roles_notFound
 	}
@@ -37,15 +37,15 @@ func (um *UserManagementService) UserSignIn(ctx context.Context, request request
 
 
 func (um *UserManagementService) UserSignUp(ctx context.Context, request requestEntites.UserSignupRequest) (*string, error) {
-	userDao := dm.NewDao(dm.USERDAO)
-	userDatas, err := userDao.GetUserByEmail(ctx, request.Email)
+	//userDao := dm.NewDao(dm.USERDAO)
+	userDatas, err := um.Dao.GetUserByEmail(ctx, request.Email)
 	if err != nil{
 		return nil, err
 	}
 	if userDatas == nil{
 		return nil, helpers.ErrUserNotFound
 	}
-	isPasswordMatch := userDao.CheckPasswordHash(ctx, request.Password, userDatas[0].Password)
+	isPasswordMatch := um.Dao.CheckPasswordHash(ctx, request.Password, userDatas[0].Password)
 	if isPasswordMatch != true{
 		return nil, helpers.InvalidPassword
 	}
@@ -75,8 +75,8 @@ func (um *UserManagementService) UserSignUp(ctx context.Context, request request
 }
 
 func (um *UserManagementService) GetUser(ctx context.Context, request requestEntites.GetUserDetails) ([]data.UserDataResponseWithRolePermission,error){
-	userDao := dm.NewDao(dm.USERDAO)
-	userDatas, err := userDao.GetUserByEmail(ctx, request.EmailID)
+	//userDao := dm.NewDao(dm.USERDAO)
+	userDatas, err := um.Dao.GetUserByEmail(ctx, request.EmailID)
 	if err != nil{
 		return nil, err
 	}
@@ -88,8 +88,8 @@ func (um *UserManagementService) GetUser(ctx context.Context, request requestEnt
 
 
 func (um *UserManagementService) GetRoles(ctx context.Context) ([]dataResponse.UserRolesResponse, error){
-	userDao := dm.NewDao(dm.USERDAO)
-	results, err := userDao.GetRoles(ctx)
+	//userDao := dm.NewDao(dm.USERDAO)
+	results, err := um.Dao.GetRoles(ctx)
 	if err != nil{
 		return nil, helpers.SomethingWrong
 	}
@@ -109,8 +109,8 @@ func (um *UserManagementService) GetRoles(ctx context.Context) ([]dataResponse.U
 }
 
 func (um *UserManagementService) CreateRoles(ctx context.Context, roles requestEntites.CreateRoles) error{
-	userDao := dm.NewDao(dm.USERDAO)
-	err := userDao.CreateRoles(ctx, roles)
+	//userDao := dm.NewDao(dm.USERDAO)
+	err := um.Dao.CreateRoles(ctx, roles)
 	if err != nil{
 		return err
 	}

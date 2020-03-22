@@ -7,17 +7,21 @@ import (
     requestEntities "github.com/todo_list_users_service/pkg/entities/requests"
     response "github.com/todo_list_users_service/pkg/entities/responses"
     "github.com/todo_list_users_service/pkg/helpers"
-    dm "github.com/todo_list_users_service/pkg/service/service_dependency_manager"
+    "github.com/todo_list_users_service/pkg/service"
     "net/http"
     "time"
 )
 
-func UserSignIn(rw http.ResponseWriter, req *http.Request) {
+
+type Controller struct {
+    Service service.UserService
+}
+func (controller Controller) UserSignIn(rw http.ResponseWriter, req *http.Request) {
     eventType, traceID := getEventTypeAndTraceID(req)
     logrus.WithField("EventType", eventType).WithField("TraceID", traceID).
         WithField("Action","Request").Info("UserSignIn Startes")
     successResponse := response.Response{}
-    um := dm.NewService(dm.USERSERVICE)
+    //um := dm.NewService(dm.USERSERVICE)
     userRequest := requestEntities.UserSigninRequest{}
     ctx, cancel := context.WithTimeout(req.Context(), time.Second*10)
     defer cancel()
@@ -34,7 +38,7 @@ func UserSignIn(rw http.ResponseWriter, req *http.Request) {
         response.HandleError(rw, helpers.InvalidRequest)
         return
     }
-    email, err := um.UserSignIn(ctx, userRequest);
+    email, err := controller.Service.UserSignIn(ctx, userRequest);
     if err!= nil{
         logrus.WithField("EventType", "UserSignIn").WithField("EventType", eventType).WithField("TraceID", traceID).
         WithError(err).Error("UserSignIn Failed")
@@ -49,13 +53,13 @@ func UserSignIn(rw http.ResponseWriter, req *http.Request) {
 }
 
 
-func UserSignUp(rw http.ResponseWriter, req *http.Request) {
+func (controller Controller) UserSignUp(rw http.ResponseWriter, req *http.Request) {
     eventType, traceID := getEventTypeAndTraceID(req)
     logrus.WithField("EventType", "UserSignUp").WithField("EventType", eventType).WithField("TraceID", traceID).
         WithField("Action","Request").Info("UserSignUp Startes")
     successResponse := response.Response{}
     userSignUpRequest := requestEntities.UserSignupRequest{}
-    um := dm.NewService(dm.USERSERVICE)
+    //um := dm.NewService(dm.USERSERVICE)
     ctx, cancel := context.WithTimeout(req.Context(), time.Second*10)
     defer cancel()
     err := userSignUpRequest.PopulateUserSignupRequest(req.Body);
@@ -71,7 +75,7 @@ func UserSignUp(rw http.ResponseWriter, req *http.Request) {
         response.HandleError(rw, helpers.InvalidRequest)
         return
     }
-    token, err := um.UserSignUp(ctx, userSignUpRequest);
+    token, err := controller.Service.UserSignUp(ctx, userSignUpRequest);
     if err!= nil{
         logrus.WithField("EventType", "UserSignUp").WithField("EventType", eventType).WithField("TraceID", traceID).
             WithError(err).Error("UserSignUp Failed")
@@ -86,12 +90,12 @@ func UserSignUp(rw http.ResponseWriter, req *http.Request) {
 }
 
 
-func GetUserDetails(rw http.ResponseWriter, req *http.Request){
+func (controller Controller) GetUserDetails(rw http.ResponseWriter, req *http.Request){
     eventType, traceID := getEventTypeAndTraceID(req)
     logrus.WithField("EventType", "GetUserDetails").WithField("EventType", eventType).WithField("TraceID", traceID).
         WithField("Action","Request").Info("GetUserDetails Startes")
     successResponse := response.Response{}
-    um := dm.NewService(dm.USERSERVICE)
+    //um := dm.NewService(dm.USERSERVICE)
     emailID := req.URL.Query().Get("email")
     ctx, cancel := context.WithTimeout(req.Context(), time.Second*10)
     defer cancel()
@@ -103,7 +107,7 @@ func GetUserDetails(rw http.ResponseWriter, req *http.Request){
         response.HandleError(rw, err)
         return
     }
-    userDatas, err := um.GetUser(ctx, getUserDetailsRequest)
+    userDatas, err := controller.Service.GetUser(ctx, getUserDetailsRequest)
     if err != nil{
         logrus.WithField("EventType", "GetUserDetails").WithField("EventType", eventType).WithField("TraceID", traceID).
             WithError(err).Error("GetUser Failed")
@@ -116,13 +120,13 @@ func GetUserDetails(rw http.ResponseWriter, req *http.Request){
         WithField("Action","Request").Info("GetUserDetails Ends")
 }
 
-func CreateRoles(rw http.ResponseWriter, req *http.Request) {
+func (controller Controller) CreateRoles(rw http.ResponseWriter, req *http.Request) {
     eventType, traceID := getEventTypeAndTraceID(req)
     logrus.WithField("EventType", "CreateRoles").WithField("EventType", eventType).WithField("TraceID", traceID).
         WithField("Action","Request").Info("CreateRoles Startes")
     successResponse := response.Response{}
     createRole := requestEntities.CreateRoles{}
-    um := dm.NewService(dm.USERSERVICE)
+    //um := dm.NewService(dm.USERSERVICE)
     ctx, cancel := context.WithTimeout(req.Context(), time.Second*10)
     defer cancel()
     err := createRole.PopulateCreateRoles(req.Body)
@@ -139,7 +143,7 @@ func CreateRoles(rw http.ResponseWriter, req *http.Request) {
         response.HandleError(rw, err)
         return
     }
-    err = um.CreateRoles(ctx, createRole)
+    err = controller.Service.CreateRoles(ctx, createRole)
     if err != nil{
         logrus.WithField("EventType", "CreateRoles").WithField("EventType", eventType).WithField("TraceID", traceID).
             WithError(err).Error("CreateRoles Failed")
@@ -151,15 +155,15 @@ func CreateRoles(rw http.ResponseWriter, req *http.Request) {
         WithField("Action","Request").Info("CreateRoles Ends")
 }
 
-func GetRoles(rw http.ResponseWriter, req *http.Request) {
+func (controller Controller) GetRoles(rw http.ResponseWriter, req *http.Request) {
     eventType, traceID := getEventTypeAndTraceID(req)
     logrus.WithField("EventType", "GetRoles").WithField("EventType", eventType).WithField("TraceID", traceID).
         WithField("Action","Request").Info("GetRoles Startes")
     successResponse := response.Response{}
-    um := dm.NewService(dm.USERSERVICE)
+    //um := dm.NewService(dm.USERSERVICE)
     ctx, cancel := context.WithTimeout(req.Context(), time.Second*10)
     defer cancel()
-     resp, err := um.GetRoles(ctx)
+     resp, err := controller.Service.GetRoles(ctx)
      if err != nil{
          logrus.WithField("EventType", "GetRoles").WithField("EventType", eventType).WithField("TraceID", traceID).
              WithError(err).Error("GetRoles Failed")
@@ -173,16 +177,16 @@ func GetRoles(rw http.ResponseWriter, req *http.Request) {
 }
 
 
-func MigrateDB(rw http.ResponseWriter, req *http.Request) {
+func (controller Controller) MigrateDB(rw http.ResponseWriter, req *http.Request) {
     eventType, traceID := getEventTypeAndTraceID(req)
     logrus.WithField("EventType", "MigrateDB").WithField("EventType", eventType).WithField("TraceID", traceID).
         WithField("Action","Request").Info("MigrateDB Startes")
     successResponse := response.Response{}
-    um := dm.NewService(dm.USERSERVICE)
+    //um := dm.NewService(dm.USERSERVICE)
     ctx, cancel := context.WithTimeout(req.Context(), time.Second*10)
     helpers.SetEnv()
     defer cancel()
-    err := um.MigrateDBService(ctx)
+    err := controller.Service.MigrateDBService(ctx)
     if err != nil{
         logrus.WithField("EventType", "MigrateDB").WithField("EventType", eventType).WithField("TraceID", traceID).
             WithError(err).Error("MigrateDBService Failed")

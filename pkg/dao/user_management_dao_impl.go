@@ -3,7 +3,6 @@ package dao;
 import (
 	"context"
 	"database/sql"
-	"github.com/todo_list_users_service/pkg/databases"
 	"github.com/todo_list_users_service/pkg/entities"
 	"github.com/todo_list_users_service/pkg/entities/data"
 	req "github.com/todo_list_users_service/pkg/entities/requests"
@@ -13,13 +12,13 @@ import (
 
 
 type UserDaoImpl struct {
-
+	DB *sql.DB
 }
 
 func (userDao *UserDaoImpl) CreateUserAndRoles(ctx context.Context, data entities.UserData, role []int)(int64, error){
-	db:= databases.GetSqlConnection()
-	tx, err := db.Begin()
-	var id int64= 0
+	//db:= databases.GetSqlConnection()
+	tx, err := userDao.DB.Begin()
+	var id int64 = 0
 	password, err := hashPassword(data.Password)
 	if err!=nil{
 		return id, err
@@ -62,9 +61,9 @@ func (userDao *UserDaoImpl) CreateUserAndRoles(ctx context.Context, data entitie
 
 func (userDao *UserDaoImpl) GetUserByEmail(ctx context.Context, email string) ([]data.UserDataResponseWithRolePermission, error) {
 	 userDataResponses := []data.UserDataResponseWithRolePermission{}
-	db:= databases.GetSqlConnection()
+	 //db:= databases.GetSqlConnection()
 	 query := mysqlQuery.GetUserWithRole()
-	 rows, err := db.Query(query, email)
+	 rows, err := userDao.DB.Query(query, email)
 	 if err !=  nil{
 		 return nil, err
 	 }
@@ -84,9 +83,9 @@ func (userDao *UserDaoImpl) GetUserByEmail(ctx context.Context, email string) ([
 }
 
 func (userDao *UserDaoImpl) GetRoles(ctx context.Context)(*sql.Rows, error){
-	db:= databases.GetSqlConnection()
+	//db:= databases.GetSqlConnection()
 	query := mysqlQuery.GetRoles()
-	results,err := db.Query(query)
+	results,err := userDao.DB.Query(query)
 	if err != nil{
 		if err == sql.ErrNoRows{
 			return nil, nil
@@ -98,8 +97,8 @@ func (userDao *UserDaoImpl) GetRoles(ctx context.Context)(*sql.Rows, error){
 }
 
 func (userDao *UserDaoImpl) CreateRoles(ctx context.Context, roles req.CreateRoles) error{
-	db:= databases.GetSqlConnection()
-	tx, err := db.Begin()
+	//db:= databases.GetSqlConnection()
+	tx, err := userDao.DB.Begin()
 	if err != nil{
 		return err
 	}
