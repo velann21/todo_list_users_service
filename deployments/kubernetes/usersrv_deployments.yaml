@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-deployment
+  labels:
+    app: usersrv
+spec:
+  template:
+    metadata:
+      name: userpod
+      labels:
+        app: usersrv
+    spec:
+      containers:
+        - name: usersrv
+          image: singaravelan21/todo_list_user_srv:v1.0.7
+          env:
+            - name: MYSQL_CONN
+              value: root:root@tcp(usersrv-database:3306)/UsersService?
+            - name:  AUTHSERVICE_CONN
+              value: http://todolistauthsrv:8083/api/v1/auth/newtoken
+  replicas: 3
+  selector:
+    matchLabels:
+      app: usersrv
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todolistusersrv
+spec:
+  type: ClusterIP
+  selector:
+    app: usersrv
+  ports:
+    - targetPort: 8081
+      port: 8081

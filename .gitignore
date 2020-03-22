@@ -1,0 +1,4 @@
+dist/
+.idea
+.idea/workspace.xml
+docker/main
