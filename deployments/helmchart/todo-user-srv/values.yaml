@@ -1,0 +1,4 @@
+replicaCount: 3
+tag: v1.0.7
+mysqlConn: root:root@tcp(usersrv-database:3306)/UsersService?
+authSrvConn: http://todolistauthsrv:8083/api/v1/auth/newtoken

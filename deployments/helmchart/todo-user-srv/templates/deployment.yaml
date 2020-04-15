@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-deployment
+  labels:
+    app: usersrv
+spec:
+  template:
+    metadata:
+      name: userpod
+      labels:
+        app: usersrv
+    spec:
+      containers:
+        - name: usersrv
+          image: singaravelan21/todo_list_user_srv:{{ .Values.tag }}
+          env:
+            - name: MYSQL_CONN
+              value: {{ .Values.mysqlConn }}
+            - name:  AUTHSERVICE_CONN
+              value: {{ .Values.authSrvConn }}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: usersrv
