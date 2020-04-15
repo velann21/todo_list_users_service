@@ -3,7 +3,9 @@ ADD . /app/backend
 RUN ls /app/backend
 WORKDIR /app/backend
 RUN go mod download
+RUN go mod vendor
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o /main /app/backend/cmd/main.go
+
 
 # final stage
 FROM alpine:latest
