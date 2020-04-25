@@ -2,15 +2,15 @@ package service;
 
 import (
 	"context"
-	"github.com/todo_list_users_service/pkg/dao"
-	internalRequest "github.com/todo_list_users_service/pkg/entities"
-	"github.com/todo_list_users_service/pkg/entities/data"
-	dataResponse "github.com/todo_list_users_service/pkg/entities/data"
-	ipcRequests "github.com/todo_list_users_service/pkg/entities/ipc_requests"
-	ipcResponse "github.com/todo_list_users_service/pkg/entities/ipc_responses"
-	requestEntites "github.com/todo_list_users_service/pkg/entities/requests"
-	"github.com/todo_list_users_service/pkg/helpers"
-	migrateDb "github.com/todo_list_users_service/pkg/migartion_scripts"
+	"github.com/velann21/todo_list_users_service/pkg/dao"
+	internalRequest "github.com/velann21/todo_list_users_service/pkg/entities"
+	"github.com/velann21/todo_list_users_service/pkg/entities/data"
+	dataResponse "github.com/velann21/todo_list_users_service/pkg/entities/data"
+	ipcRequests "github.com/velann21/todo_list_users_service/pkg/entities/ipc_requests"
+	ipcResponse "github.com/velann21/todo_list_users_service/pkg/entities/ipc_responses"
+	requestEntites "github.com/velann21/todo_list_users_service/pkg/entities/requests"
+	"github.com/velann21/todo_list_users_service/pkg/helpers"
+	migrateDb "github.com/velann21/todo_list_users_service/pkg/migartion_scripts"
 	"log"
 )
 type UserManagementService struct{
@@ -18,7 +18,6 @@ type UserManagementService struct{
 }
 
 func (um *UserManagementService) UserSignIn(ctx context.Context, request requestEntites.UserSigninRequest) (*string, error) {
-	//userDao := dm.NewDao(dm.USERDAO)
 	userModel := internalRequest.UserData{}
 	userData, err := um.Dao.GetUserByEmail(ctx, request.Email)
 	if err != nil{
@@ -37,7 +36,6 @@ func (um *UserManagementService) UserSignIn(ctx context.Context, request request
 
 
 func (um *UserManagementService) UserSignUp(ctx context.Context, request requestEntites.UserSignupRequest) (*string, error) {
-	//userDao := dm.NewDao(dm.USERDAO)
 	userDatas, err := um.Dao.GetUserByEmail(ctx, request.Email)
 	if err != nil{
 		return nil, err
@@ -60,8 +58,10 @@ func (um *UserManagementService) UserSignUp(ctx context.Context, request request
 	authRequestData.Email = userDatas[0].Email
 	jsonData, err:=authRequestData.MarshalAuthRequestBody()
 	log.Print(string(jsonData))
+
 	resp, err := helpers.HttpRequest("POST",helpers.ReadEnv(helpers.AUTHSERVICECONNECTION),jsonData)
-	if err != nil{
+	if err != nil {
+		log.Println("Something wrong",err.Error())
 		return nil, helpers.SomethingWrong
 	}
 	body := resp.Body
@@ -75,7 +75,6 @@ func (um *UserManagementService) UserSignUp(ctx context.Context, request request
 }
 
 func (um *UserManagementService) GetUser(ctx context.Context, request requestEntites.GetUserDetails) ([]data.UserDataResponseWithRolePermission,error){
-	//userDao := dm.NewDao(dm.USERDAO)
 	userDatas, err := um.Dao.GetUserByEmail(ctx, request.EmailID)
 	if err != nil{
 		return nil, err
@@ -88,12 +87,11 @@ func (um *UserManagementService) GetUser(ctx context.Context, request requestEnt
 
 
 func (um *UserManagementService) GetRoles(ctx context.Context) ([]dataResponse.UserRolesResponse, error){
-	//userDao := dm.NewDao(dm.USERDAO)
 	results, err := um.Dao.GetRoles(ctx)
 	if err != nil{
 		return nil, helpers.SomethingWrong
 	}
-	if results == nil && err == nil{
+	if results == nil {
 		return nil, helpers.NoresultFound
 	}
 	userRolesResp := []dataResponse.UserRolesResponse{}
@@ -109,7 +107,6 @@ func (um *UserManagementService) GetRoles(ctx context.Context) ([]dataResponse.U
 }
 
 func (um *UserManagementService) CreateRoles(ctx context.Context, roles requestEntites.CreateRoles) error{
-	//userDao := dm.NewDao(dm.USERDAO)
 	err := um.Dao.CreateRoles(ctx, roles)
 	if err != nil{
 		return err

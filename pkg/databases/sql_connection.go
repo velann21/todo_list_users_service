@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/todo_list_users_service/pkg/helpers"
+	"github.com/velann21/todo_list_users_service/pkg/helpers"
 	"sync"
 )
 
@@ -40,6 +40,19 @@ func (sqlConn *SQLConnection) OpenSqlConnection() (error) {
 
 func GetSqlConnection() *sql.DB{
     return connection.db
+}
+
+
+type DBFuncs interface{
+	Begin()
+	Query(string, ...string)
+
+
+
+}
+
+type Tx interface {
+	Prepare(string)
 }
 
 

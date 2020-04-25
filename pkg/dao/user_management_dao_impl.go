@@ -3,10 +3,10 @@ package dao;
 import (
 	"context"
 	"database/sql"
-	"github.com/todo_list_users_service/pkg/entities"
-	"github.com/todo_list_users_service/pkg/entities/data"
-	req "github.com/todo_list_users_service/pkg/entities/requests"
-	mysqlQuery "github.com/todo_list_users_service/pkg/helpers/mysql_query_helper"
+	"github.com/velann21/todo_list_users_service/pkg/entities"
+	"github.com/velann21/todo_list_users_service/pkg/entities/data"
+	req "github.com/velann21/todo_list_users_service/pkg/entities/requests"
+	mysqlQuery "github.com/velann21/todo_list_users_service/pkg/helpers/mysql_query_helper"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -16,7 +16,6 @@ type UserDaoImpl struct {
 }
 
 func (userDao *UserDaoImpl) CreateUserAndRoles(ctx context.Context, data entities.UserData, role []int)(int64, error){
-	//db:= databases.GetSqlConnection()
 	tx, err := userDao.DB.Begin()
 	var id int64 = 0
 	password, err := hashPassword(data.Password)
@@ -61,7 +60,6 @@ func (userDao *UserDaoImpl) CreateUserAndRoles(ctx context.Context, data entitie
 
 func (userDao *UserDaoImpl) GetUserByEmail(ctx context.Context, email string) ([]data.UserDataResponseWithRolePermission, error) {
 	 userDataResponses := []data.UserDataResponseWithRolePermission{}
-	 //db:= databases.GetSqlConnection()
 	 query := mysqlQuery.GetUserWithRole()
 	 rows, err := userDao.DB.Query(query, email)
 	 if err !=  nil{
@@ -83,7 +81,6 @@ func (userDao *UserDaoImpl) GetUserByEmail(ctx context.Context, email string) ([
 }
 
 func (userDao *UserDaoImpl) GetRoles(ctx context.Context)(*sql.Rows, error){
-	//db:= databases.GetSqlConnection()
 	query := mysqlQuery.GetRoles()
 	results,err := userDao.DB.Query(query)
 	if err != nil{
@@ -97,7 +94,6 @@ func (userDao *UserDaoImpl) GetRoles(ctx context.Context)(*sql.Rows, error){
 }
 
 func (userDao *UserDaoImpl) CreateRoles(ctx context.Context, roles req.CreateRoles) error{
-	//db:= databases.GetSqlConnection()
 	tx, err := userDao.DB.Begin()
 	if err != nil{
 		return err

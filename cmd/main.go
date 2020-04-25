@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
-	"github.com/todo_list_users_service/pkg/databases"
-	"github.com/todo_list_users_service/pkg/routes"
+	"github.com/velann21/todo_list_users_service/pkg/databases"
+	"github.com/velann21/todo_list_users_service/pkg/routes"
 	"log"
 	"net/http"
 	"os"

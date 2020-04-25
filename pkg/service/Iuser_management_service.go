@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
-	"github.com/todo_list_users_service/pkg/entities/data"
-	dataResponse "github.com/todo_list_users_service/pkg/entities/data"
-	requestEntites "github.com/todo_list_users_service/pkg/entities/requests"
+	"github.com/velann21/todo_list_users_service/pkg/entities/data"
+	dataResponse "github.com/velann21/todo_list_users_service/pkg/entities/data"
+	requestEntites "github.com/velann21/todo_list_users_service/pkg/entities/requests"
 )
 type UserService interface {
 	UserSignIn(ctx context.Context, request requestEntites.UserSigninRequest) (*string, error);

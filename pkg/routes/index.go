@@ -2,10 +2,10 @@ package routes
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/todo_list_users_service/pkg/controller"
-	"github.com/todo_list_users_service/pkg/dao"
-	"github.com/todo_list_users_service/pkg/databases"
-	"github.com/todo_list_users_service/pkg/service"
+	"github.com/velann21/todo_list_users_service/pkg/controller"
+	"github.com/velann21/todo_list_users_service/pkg/dao"
+	"github.com/velann21/todo_list_users_service/pkg/databases"
+	"github.com/velann21/todo_list_users_service/pkg/service"
 )
 
 func Initialize(indexRoute *mux.Router) {

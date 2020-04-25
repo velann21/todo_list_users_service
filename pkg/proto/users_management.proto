@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+message UserRegistrationRequest{
+    string firstName = 1;
+    string lastName = 2;
+    string dob = 3;
+    string phoneNumber = 4;
+    string email = 5;
+    repeated int32 role = 6;
+    string Password = 7;
+}
+
+message UserRegistrationResponse{
+    string  UserName  = 1;
+}
+
+message UserLoginRequest{
+
+}
+
+message UserLoginResponse{
+
+}
+
+service UserManagementService{
+    rpc RegisterUser(UserRegistrationRequest) returns (UserRegistrationResponse) {};
+    rpc LoginUser(UserRegistrationRequest) returns (UserRegistrationResponse) {};
+    rpc GetUserDetails(UserRegistrationRequest) returns (UserRegistrationResponse) {};
+}

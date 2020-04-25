@@ -1,7 +1,7 @@
 package dao_dependency_manager
 
 
-import "github.com/todo_list_users_service/pkg/dao"
+import "github.com/velann21/todo_list_users_service/pkg/dao"
 
 const(
 	USERDAO = "UserDao"

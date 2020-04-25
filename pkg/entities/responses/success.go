@@ -2,7 +2,7 @@ package entities
 
 import (
 	"encoding/json"
-	"github.com/todo_list_users_service/pkg/entities/data"
+	"github.com/velann21/todo_list_users_service/pkg/entities/data"
 	"net/http"
 
 )

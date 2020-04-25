@@ -3,9 +3,9 @@ package dao
 import (
 	"context"
 	"database/sql"
-	"github.com/todo_list_users_service/pkg/entities"
-	"github.com/todo_list_users_service/pkg/entities/data"
-	req "github.com/todo_list_users_service/pkg/entities/requests"
+	"github.com/velann21/todo_list_users_service/pkg/entities"
+	"github.com/velann21/todo_list_users_service/pkg/entities/data"
+	req "github.com/velann21/todo_list_users_service/pkg/entities/requests"
 )
 
 type UserDao interface {

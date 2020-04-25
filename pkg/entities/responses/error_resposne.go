@@ -4,7 +4,7 @@ import (
 "encoding/json"
 "net/http"
 
-helpers "github.com/todo_list_users_service/pkg/helpers"
+helpers "github.com/velann21/todo_list_users_service/pkg/helpers"
 )
 
 // ErrorResponse response for error

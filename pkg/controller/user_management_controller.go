@@ -4,10 +4,10 @@ import (
     "context"
     "fmt"
     "github.com/sirupsen/logrus"
-    requestEntities "github.com/todo_list_users_service/pkg/entities/requests"
-    response "github.com/todo_list_users_service/pkg/entities/responses"
-    "github.com/todo_list_users_service/pkg/helpers"
-    "github.com/todo_list_users_service/pkg/service"
+    requestEntities "github.com/velann21/todo_list_users_service/pkg/entities/requests"
+    response "github.com/velann21/todo_list_users_service/pkg/entities/responses"
+    "github.com/velann21/todo_list_users_service/pkg/helpers"
+    "github.com/velann21/todo_list_users_service/pkg/service"
     "net/http"
     "time"
 )
@@ -21,7 +21,7 @@ func (controller Controller) UserSignIn(rw http.ResponseWriter, req *http.Reques
     logrus.WithField("EventType", eventType).WithField("TraceID", traceID).
         WithField("Action","Request").Info("UserSignIn Startes")
     successResponse := response.Response{}
-    //um := dm.NewService(dm.USERSERVICE)
+
     userRequest := requestEntities.UserSigninRequest{}
     ctx, cancel := context.WithTimeout(req.Context(), time.Second*10)
     defer cancel()
@@ -59,7 +59,6 @@ func (controller Controller) UserSignUp(rw http.ResponseWriter, req *http.Reques
         WithField("Action","Request").Info("UserSignUp Startes")
     successResponse := response.Response{}
     userSignUpRequest := requestEntities.UserSignupRequest{}
-    //um := dm.NewService(dm.USERSERVICE)
     ctx, cancel := context.WithTimeout(req.Context(), time.Second*10)
     defer cancel()
     err := userSignUpRequest.PopulateUserSignupRequest(req.Body);
@@ -95,7 +94,6 @@ func (controller Controller) GetUserDetails(rw http.ResponseWriter, req *http.Re
     logrus.WithField("EventType", "GetUserDetails").WithField("EventType", eventType).WithField("TraceID", traceID).
         WithField("Action","Request").Info("GetUserDetails Startes")
     successResponse := response.Response{}
-    //um := dm.NewService(dm.USERSERVICE)
     emailID := req.URL.Query().Get("email")
     ctx, cancel := context.WithTimeout(req.Context(), time.Second*10)
     defer cancel()
@@ -126,7 +124,6 @@ func (controller Controller) CreateRoles(rw http.ResponseWriter, req *http.Reque
         WithField("Action","Request").Info("CreateRoles Startes")
     successResponse := response.Response{}
     createRole := requestEntities.CreateRoles{}
-    //um := dm.NewService(dm.USERSERVICE)
     ctx, cancel := context.WithTimeout(req.Context(), time.Second*10)
     defer cancel()
     err := createRole.PopulateCreateRoles(req.Body)
@@ -160,7 +157,6 @@ func (controller Controller) GetRoles(rw http.ResponseWriter, req *http.Request)
     logrus.WithField("EventType", "GetRoles").WithField("EventType", eventType).WithField("TraceID", traceID).
         WithField("Action","Request").Info("GetRoles Startes")
     successResponse := response.Response{}
-    //um := dm.NewService(dm.USERSERVICE)
     ctx, cancel := context.WithTimeout(req.Context(), time.Second*10)
     defer cancel()
      resp, err := controller.Service.GetRoles(ctx)
@@ -182,7 +178,6 @@ func (controller Controller) MigrateDB(rw http.ResponseWriter, req *http.Request
     logrus.WithField("EventType", "MigrateDB").WithField("EventType", eventType).WithField("TraceID", traceID).
         WithField("Action","Request").Info("MigrateDB Startes")
     successResponse := response.Response{}
-    //um := dm.NewService(dm.USERSERVICE)
     ctx, cancel := context.WithTimeout(req.Context(), time.Second*10)
     helpers.SetEnv()
     defer cancel()
