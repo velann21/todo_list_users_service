@@ -59,7 +59,7 @@ func (um *UserManagementService) UserSignUp(ctx context.Context, request request
 	jsonData, err:=authRequestData.MarshalAuthRequestBody()
 	log.Print(string(jsonData))
 
-	resp, err := helpers.HttpRequest("POST",helpers.ReadEnv(helpers.AUTHSERVICECONNECTION),jsonData)
+	resp, err := helpers.HttpRequest("POST","http://todolistauthsrv:8083/api/v1/auth/newtoken",jsonData)
 	if err != nil {
 		log.Println("Something wrong",err.Error())
 		return nil, helpers.SomethingWrong
