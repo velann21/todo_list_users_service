@@ -31,5 +31,4 @@ release: release-tag copy-migration
 	cd ../docker; docker tag "singaravelan21/todo_list_user_srv" "singaravelan21/todo_list_user_srv:`cat ../.version`";
 	cd ../docker; docker push "singaravelan21/todo_list_user_srv:`cat ../.version`"
 	make docker-build-cleanup
-	make delete-migration
 
